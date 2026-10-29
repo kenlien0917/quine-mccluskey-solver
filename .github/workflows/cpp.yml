@@ -1,0 +1,15 @@
+name: C++ verification
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: mkdir -p build
+      - run: g++ -std=c++17 -Wall -Wextra -O2 examples/demo.cpp -o build/demo
+      - run: ./build/demo
+      - run: g++ -std=c++17 -Wall -Wextra -O2 tests/truth_table.cpp -o build/truth_table
+      - run: timeout 60s ./build/truth_table
